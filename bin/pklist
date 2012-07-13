@@ -1,0 +1,2 @@
+#!/bin/sh
+ls /etc/pkscripts/bin $*
