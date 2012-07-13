@@ -121,18 +121,38 @@ if ($cmd == "del") {
 	}
 	file_put_contents($fno, implode("\n", $co));
 } else if ($cmd == "make") {
+	isset($argv[$argi]) or die("Missing parameter: <output_file_name>\n");
+	$fno = $argv[$argi++];
+	(substr($fno, -7) == ".tar.gz") or die("Name of output file must end with .tar.gz (drupal make's request).\n");
 	$cwd = getcwd();
 	$last_dir_pos = strripos($cwd, "/");
 	if ($last_dir_pos === FALSE) {
 		$last_dir_pos = -1;
 	}
 	$last_dir = substr($cwd, $last_dir_pos + 1);
-	echo "Project: $last_dir\n";
-	$instance = "$instance_updir/$last_dir";
-	echo "Instance: $instance\n";
+	//echo "Project: $last_dir\n";
+	//$instance = "$instance_updir/$last_dir";
+	//echo "Instance: $instance\n";
 	assert(file_exists("make.ini")) or die("File make.ini not found!\n");
-
-	passthru("drush make --tar make.ini platform-$instance.tar.gz");
+	//$fno = "platform-$last_dir.tar.gz";
+	//$fno_temp = "platform-$last_dir.tmp.tar.gz";
+	//$fno_temp = tempnam("/tmp", "kratopaltool")."/".$fno;
+	echo "Making drupal instance to the archive: $fno\n";
+	if (file_exists($fno)) {
+		unlink($fno);
+	}
+	passthru("drush make --tar make.ini $fno", $result);
+	$ok = ($result == 0);
+	if ($ok) {
+		file_exists($fno) or die("Error: Huh! No error result from drush make, but output file not found!");
+		$file_size = filesize($fno);
+		$file_size_MB = ceil($file_size / 1024 / 1024);
+		print "Everything is OK! Output file created ($file_size_MB MB): $fno\n";
+		exit(0);
+	} else {
+		print "Error(s) found!\n";
+		exit($result);
+	}
 } else {
 	print "ERROR: Unknown command: $cmd\n";
 }
