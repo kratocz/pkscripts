@@ -153,6 +153,27 @@ if ($cmd == "del") {
 		print "Error(s) found!\n";
 		exit($result);
 	}
+} else if ($cmd == "deploy") {
+	$fin = $argv[$argi++];
+	$don = $argv[$argi++];
+	(substr($fin, -7) == ".tar.gz") or die("Error: Name of input file must end with .tar.gz (drupal make's request).\n");
+	file_exists($fin) or die("Error: Input file $fin not found!\n");
+	$basename = substr($fin, 0, strlen($fin) - 7);
+	$don_last_slash_pos = strripos($don, "/");
+	($don_last_slash_pos !== FALSE) or die("Error: Bad output dir path!");
+	$updir = substr($don, 0, $don_last_slash_pos);
+	print "Uncompress platform $basename from $fin to $updir and rename it from $updir/$basename to $don ... ";
+	$cwd = getcwd();
+	chdir($updir) or die("Error: Unable to change directory to: $updir");
+	passthru("tar -zxf $cwd/$fin", $result);
+	chdir($cwd) or die("Error: Unable to change directory back to: $cwd");
+	if ($result == 0) {
+		rename("$updir/$basename", $don);
+		print "ok\nDeployed to: $don\n";
+		exit(0);
+	}
+	print "Error(s) found!\n";
+	exit($result);
 } else {
 	print "ERROR: Unknown command: $cmd\n";
 }
