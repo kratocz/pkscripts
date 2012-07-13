@@ -6,3 +6,8 @@ by finding module pathauto or views.
 
 * kratopaltool.php del module <module_name>
 Removes module <module_name> from list of modules.
+
+* kratopaltool.php find module <module_name>
+Outputs if module <module_name> is on the list of modules. Scripts returns 0
+if module is on the list or 1 otherwise.
+

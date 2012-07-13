@@ -8,7 +8,7 @@ $argi = 1;
 
 if (!isset($argv[$argi])) {
 	print "Kratopaltool by Petr Kratochvil (c) 2012 krato@krato.cz, comes to you with no guaratees.\n";
-	print "Usage: $argv[0] {add|del} module <module_name>\n";
+	print "Usage: $argv[0] {add|del|find} module <module_name>\n";
 	exit;
 }
 
@@ -44,6 +44,24 @@ if ($cmd == "del") {
 		}
 	}
 	file_put_contents($fno, implode("\n", $co));
+} else if ($cmd == "find") {
+	expect("module", $argv[$argi++]);
+	$module = $argv[$argi++];
+	$found = FALSE;
+	foreach ($ci as $rowid => $row) {
+		$mod = parse_module_name($row);
+		if ($mod == $module) {
+			$found = TRUE;
+			break;
+		}
+	}
+	if ($found) {
+		print "YES, module $module is on the list!\n";
+		exit(0);
+	} else {
+		print "NO, module $module is not on the list.\n";
+		exit(1);
+	}
 } else if ($cmd == "add") {
 	expect("module", $argv[$argi++]);
 	$module = $argv[$argi++];
