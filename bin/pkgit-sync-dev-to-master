@@ -1,6 +1,7 @@
 #!/bin/sh
 git checkout dev \
 && git checkout master \
+&& git pull \
 && git merge dev \
 && git checkout dev \
 && git push --all

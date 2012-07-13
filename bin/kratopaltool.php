@@ -5,6 +5,7 @@ $fno = "make.ini";
 $ci = file($fni);
 $co = array();
 $argi = 1;
+$instance_updir = "~/pkplatforms";
 
 if (!isset($argv[$argi])) {
 	print "Kratopaltool by Petr Kratochvil (c) 2012 krato@krato.cz, comes to you with no guaratees.\n";
@@ -119,6 +120,19 @@ if ($cmd == "del") {
 		$co[] = $row;
 	}
 	file_put_contents($fno, implode("\n", $co));
+} else if ($cmd == "make") {
+	$cwd = getcwd();
+	$last_dir_pos = strripos($cwd, "/");
+	if ($last_dir_pos === FALSE) {
+		$last_dir_pos = -1;
+	}
+	$last_dir = substr($cwd, $last_dir_pos + 1);
+	echo "Project: $last_dir\n";
+	$instance = "$instance_updir/$last_dir";
+	echo "Instance: $instance\n";
+	assert(file_exists("make.ini")) or die("File make.ini not found!\n");
+
+	passthru("drush make --tar make.ini platform-$instance.tar.gz");
 } else {
 	print "ERROR: Unknown command: $cmd\n";
 }
