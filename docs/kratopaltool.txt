@@ -1,0 +1,8 @@
+Usages: kratopaltool.php <command> <param1> [<param2> ...]
+
+* kratopaltool.php add module <module_name>
+Adds module <module_name> to list of modules. List of modules is autodetected
+by finding module pathauto or views.
+
+* kratopaltool.php del module <module_name>
+Removes module <module_name> from list of modules.
