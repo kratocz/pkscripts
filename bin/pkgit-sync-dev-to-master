@@ -4,4 +4,5 @@ git checkout dev \
 && git merge dev \
 && git checkout dev \
 && git push --all
+git checkout dev
 
