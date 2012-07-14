@@ -44,7 +44,7 @@ if ($cmd == "del") {
 			$co[] = $row;
 		}
 	}
-	file_put_contents($fno, implode("\n", $co));
+	file_put_contents($fno, implode("\n", $co)."\n");
 } else if ($cmd == "find") {
 	expect("module", $argv[$argi++]);
 	$module = $argv[$argi++];
@@ -119,7 +119,7 @@ if ($cmd == "del") {
 //		}
 		$co[] = $row;
 	}
-	file_put_contents($fno, implode("\n", $co));
+	file_put_contents($fno, implode("\n", $co)."\n");
 } else if ($cmd == "make") {
 	isset($argv[$argi]) or die("Missing parameter: <output_file_name>\n");
 	$fno = $argv[$argi++];
