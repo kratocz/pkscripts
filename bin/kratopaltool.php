@@ -147,7 +147,7 @@ if ($cmd == "del") {
 		file_exists($fno) or die("Error: Huh! No error result from drush make, but output file not found!");
 		$file_size = filesize($fno);
 		$file_size_MB = ceil($file_size / 1024 / 1024);
-		print "Everything is OK! Output file created ($file_size_MB MB): $fno\n";
+		print "Everything is OK!\nOutput file created ($file_size_MB MB): $fno\n";
 		exit(0);
 	} else {
 		print "Error(s) found!\n";
