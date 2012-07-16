@@ -1,0 +1,26 @@
+#!/bin/sh
+. `dirname $0`/../conf/pkpal-clear-cache-all.conf
+#ROOT=`pwd`/static
+for rel_platform in `ls $ROOT`; do
+  platform=$ROOT/$rel_platform
+  if [ -d $platform ]; then
+    #echo Platform: $platform
+    SITESDIR=$platform/sites
+    for rel_site in `ls $SITESDIR`; do
+      site=$SITESDIR/$rel_site
+      if [ -d $site ] && [ $rel_site != "all" ] && [ $rel_site != "default" ] && [ $rel_site != "example.sites.php" ]; then
+        echo Site: $site
+        cd $site
+        for i in `seq 1 1 10`; do
+          echo -n "try #$i: "
+          drush cc all && break;
+          echo -n "ERROR => waiting 10 seconds before next try ... "
+          sleep 10
+          echo "ok, retrying:"
+        done
+      fi
+    done
+  fi
+done
+cd $ROOT
+
